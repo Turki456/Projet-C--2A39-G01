@@ -8,6 +8,25 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+/*
+
+            //chaine validator
+            QRegExp chaine(valid_chaine);
+            //date validator
+
+            //champ numeriques
+            QIntValidator *code_valider =new QIntValidator(0,99999999,this);
+            ui->CIN_le->setValidator(code_valider);
+            ui->ID_le->setValidator(code_valider);
+            ui->salaire_le->setValidator(code_valider);
+
+            //champ nom, prenom et poste
+            QRegExpValidator *chaine_valider =new QRegExpValidator(chaine,this);
+            ui->nom_le->setValidator(chaine_valider);
+            ui->prenom_le->setValidator(chaine_valider);
+            ui->poste_le->setValidator(chaine_valider);
+*/
+
     ui->setupUi(this);
     ui->tableView->setModel(Etmp.afficher());
 }
