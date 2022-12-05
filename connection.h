@@ -3,16 +3,13 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-//test commentaire
+
 class Connection
 {
-    private:
-        QSqlDatabase db;
-    public:
+    QSqlDatabase db;
+public:
     Connection();
-    bool createconnection();
-    void closeconnection();
-
+    bool createconnect();
+    void closeConnection();
 };
-
 #endif // CONNECTION_H
