@@ -13,7 +13,6 @@ BUDGET=0;
  DATE_FIN_M="";
  DESTINATION="";
  TYPE_DE_MISSION="";
- ETAT=0;
 
 
 }
@@ -27,7 +26,7 @@ Mission::Mission( int ID,int NBR_DE_PERSONES,float BUDGET, QString DATE_DEBUT_M,
     this->DATE_FIN_M=DATE_FIN_M;
     this->DESTINATION=DESTINATION;
     this->TYPE_DE_MISSION=TYPE_DE_MISSION;
-   this->ETAT=0;
+   // this->ETAT=ETAT;
 
 }
 int Mission::getID(){return  ID;}

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "logement.h"
+#include "dialoglogin.h"
 #include <QMessageBox>
 #include <QIntValidator>
 #include <QValidator>
@@ -29,6 +30,8 @@
 #include <QFileDialog>
 #include "exportexcel.h"
 #include<QPrintDialog>
+//employe
+#include "todolist.h"
 
 
 
@@ -46,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
      QObject::connect(A.getserial(),SIGNAL(readyRead()),this,SLOT(update_label())); // permet de lancer
      //le slot update_label suite à la reception du signal readyRead (reception des données).
-     //QObject::connect(A.getserial(),SIGNAL(readyRead()),this,SLOT(afficherMissionArduino()));
 
      ui->setupUi(this);
     ui->tableView->setModel(Dtmp.afficher());
@@ -111,6 +113,34 @@ MainWindow::MainWindow(QWidget *parent)
         ui->comboBox_cher->addItem("par TYPE");
         ui->comboBox_cher->addItem("par NB_per");
         ui->comboBox_cher->addItem("par ID");
+
+        //partenaire
+
+        ui->tableView_partenaire->setModel(partenaire.afficher());
+        ui->lineEdit_ID_ajouter_partenaire->setValidator(new QIntValidator(0,20,this));
+        ui->lineEdit_ID_modifier_partenaire->setValidator(new QIntValidator(0,20,this));
+        ui->lineEdit_ID_supprimer_partenaire->setValidator(new QIntValidator(0,20,this));
+        ui->lineEdit_NumTel_ajouter_partenaire->setValidator(new QIntValidator(0,99999999,this));
+        ui->lineEdit_NumTel_modifier_partenaire->setValidator(new QIntValidator(0,99999999,this));
+        ui->lineEdit_Dureecontrat_ajouter_partenaire->setValidator(new QIntValidator(0,10,this));
+        ui->lineEdit_Dureecontrat_modifier_partenaire->setValidator(new QIntValidator(0,10,this));
+        ui->lineEdit_Remise_ajouter_partenaire->setValidator(new QIntValidator(0,99,this));
+        ui->lineEdit_Remise_modifier_partenaire->setValidator(new QIntValidator(0,99,this));
+
+        ui->comboBox_tri_partenaire->addItem("Tri par ordre croissant");
+        ui->comboBox_tri_partenaire->addItem("Tri par ordre decroissant");
+        ui->comboBox_tri_partenaire->addItem("Tri par ordre Remise");
+        ui->comboBox_type_partenaire->addItem("Hotel");
+        ui->comboBox_type_partenaire->addItem("Airline");
+        ui->comboBox_type_partenaire->addItem("Location");
+        ui->comboBox_type2_partenaire->addItem("Hotel");
+        ui->comboBox_type2_partenaire->addItem("Airline");
+        ui->comboBox_type2_partenaire->addItem("Location");
+
+        ui->comboBox_recherche_partenaire->addItem("ID");
+        ui->comboBox_recherche_partenaire->addItem("Type");
+        ui->comboBox_recherche_partenaire->addItem("Nom");
+
 
 
 }
@@ -741,7 +771,7 @@ void MainWindow::update_label()
         ui->label_34->setText("il n y a pas un feu");
 
      }
-     else if(data=="1")
+     else
      {    //qDebug() << "this is the received data";
          //qDebug() << data;
          //qDebug() << "this is the  data transformed into a text";
@@ -800,34 +830,6 @@ void MainWindow::update_label()
 
 
 }
-    //mss
-    QString dateRDV,message;
-   // data = A.read_from_arduino();
-    QString DataAsString = QTextCodec::codecForMib(106)->toUnicode(data);
-    if(data == "2"){
-        A.write_to_arduino("ms n'existe pas");
-    }
-    else{
-        QSqlQuery query,query1;
-             query.prepare("select * from MISSION where ID =:ID ");
-             query.bindValue(":ID", DataAsString);
-             query.exec();
-             while(query.next()){
-                 dateRDV = query.value(0).toString();
-                 if(query.value(7).toInt() == 0){
-                     query1.prepare("update MISSION set ETAT =:ETAT where ID=:ID");
-                     query1.bindValue(":ETAT","1");
-                     query1.bindValue(":ID", DataAsString);
-                     query1.exec();
-
-                     message = "mission "+ dateRDV + "terminé";
-                 }
-                 else{
-                        message ="mis deja fait";
-                     }
-                 }
-             A.write_to_arduino(message.toUtf8());
-             }
 
 
 
@@ -1220,6 +1222,266 @@ void MainWindow::on_tableCALEN_activated(const QModelIndex &index)
 
 
 
+void MainWindow::afficherMissionArduino(){
+    QString dateRDV,message;
+    data = A.read_from_arduino();
+    QString DataAsString = QTextCodec::codecForMib(106)->toUnicode(data);
+    if(data == "0"){
+        A.write_to_arduino("ms n'existe pas");
+    }
+    else{
+        QSqlQuery query,query1;
+             query.prepare("select * from MISSION where ID =:ID ");
+             query.bindValue(":ID", DataAsString);
+             query.exec();
+             while(query.next()){
+                 dateRDV = query.value(0).toString();
+                 if(query.value(7).toInt() == 0){
+                     query1.prepare("update MISSION set ETAT =:ETAT where ID=:ID");
+                     query1.bindValue(":ETAT","1");
+                     query1.bindValue(":ID", DataAsString);
+                     query1.exec();
+
+                     message = "mission "+ dateRDV + "terminé";
+                 }
+                 else{
+                        message ="mis deja fait";
+                     }
+                 }
+             A.write_to_arduino(message.toUtf8());
+             }
+}
+
+
+
+
+
+
+
+//
+void MainWindow::on_Gestion1_clicked()
+{
+ ui->stackedWidget->setCurrentIndex(1);
+}
+
+void MainWindow::on_Gestion2_clicked()
+{
+  ui->stackedWidget->setCurrentIndex(2);
+}
+
+
+void MainWindow::on_todolistBUTTON_clicked()
+{
+    TodoList *app;
+    app = new TodoList();
+    app->show();
+    //this->close();
+}
+
+void MainWindow::on_pushButton_quitter_admin_crud_clicked()
+{
+    Dialoglogin *l;
+
+    l = new Dialoglogin();
+
+        l->show();
+        this->close();
+}
+//gestion partenaire
+void MainWindow::on_Gestion3_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+
+// Partenaire_ajout
+void MainWindow::on_pushButton_partenaire_ajouter_clicked()
+{
+ Partenaire p ;
+ p.set_id(ui->lineEdit_ID_ajouter_partenaire->text());
+ p.set_nom(ui->lineEdit_Nom_ajouter_partenaire->text());
+ p.set_mail(ui->lineEdit_Mail_ajouter_partenaire->text());
+ p.set_numtel(ui->lineEdit_NumTel_ajouter_partenaire->text());
+ p.set_dureecontrat(ui->lineEdit_Dureecontrat_ajouter_partenaire->text());
+ p.set_remise(ui->lineEdit_Remise_ajouter_partenaire->text());
+ p.set_type(ui->comboBox_type_partenaire->currentText());
+ bool ajout= p.ajouter(p);
+ if(ajout)
+    {
+        ui->tableView_partenaire->setModel(partenaire.afficher());
+        QMessageBox::information(nullptr, QObject::tr("PARTENAIRE ajouter"),
+                    QObject::tr("PARTENAIRE ajouter.\n"
+                                "Click Cancel to exit."), QMessageBox::Cancel);
+
+}
+    else
+
+        QMessageBox::critical(nullptr, QObject::tr("PARTENAIRE non ajouter"),
+                    QObject::tr("PARTENAIRE non ajouter.\n"
+                                "Click Cancel to exit."), QMessageBox::Cancel);
+}
+
+//Partenaire_supprimer
+void MainWindow::on_pushButton_partenaire_supprimer_clicked()
+{
+    Partenaire p ;
+    int id=ui->lineEdit_ID_supprimer_partenaire->text().toInt();
+    bool supprime= p.supprimer(id);
+    if(supprime)
+       {
+
+           QMessageBox::information(nullptr, QObject::tr("PARTENAIRE supprimer"),
+                       QObject::tr("PARTENAIRE supprimer.\n"
+                                   "Click Cancel to exit."), QMessageBox::Cancel);
+            ui->tableView_partenaire->setModel(partenaire.afficher());
+
+   }
+       else
+           QMessageBox::critical(nullptr, QObject::tr("PARTENAIRE non supprimer"),
+                       QObject::tr("PARTENAIRE non supprimer.\n"
+                                   "Click Cancel to exit."), QMessageBox::Cancel);
+}
+
+
+
+
+//Partenaire_modifier
+
+void MainWindow::on_pushButton_partenaire_modifier_clicked()
+{
+    Partenaire p ;
+    p.set_id(ui->lineEdit_ID_modifier_partenaire->text());
+    p.set_nom(ui->lineEdit_Nom_modifier_partenaire->text());
+    p.set_mail(ui->lineEdit_Mail_modifier_partenaire->text());
+    p.set_numtel(ui->lineEdit_NumTel_modifier_partenaire->text());
+    p.set_dureecontrat(ui->lineEdit_Dureecontrat_modifier_partenaire->text());
+    p.set_remise(ui->lineEdit_Remise_modifier_partenaire->text());
+    p.set_type(ui->comboBox_type2_partenaire->currentText());
+    bool modif= p.modifier(p);
+    if(modif)
+       {
+           ui->tableView_partenaire->setModel(partenaire.afficher());
+           QMessageBox::information(nullptr, QObject::tr("PARTENAIRE modifier"),
+                       QObject::tr("PARTENAIRE modifier.\n"
+                                   "Click Cancel to exit."), QMessageBox::Cancel);
+
+   }
+       else
+           QMessageBox::critical(nullptr, QObject::tr("PARTENAIRE non modifier"),
+                       QObject::tr("PARTENAIRE non modifier.\n"
+                                   "Click Cancel to exit."), QMessageBox::Cancel);
+
+}
+
+
+//Partenaire_pdf
+void MainWindow::on_pushButton_partenaire_pdf_clicked()
+{
+    QString strStream;
+                    QTextStream out(&strStream);
+                    const int rowCount = ui->tableView_partenaire->model()->rowCount();
+                    const int columnCount =ui->tableView_partenaire->model()->columnCount();
+
+
+                    out <<  "<html>\n"
+                            "<head>\n"
+                            "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+                            <<  QString("<title>%1</title>\n").arg("eleve")
+                            <<  "</head>\n"
+                            "<body bgcolor=#F2E7D5 link=#393E46>\n"
+                                "<h1>Liste des Partenaires</h1>"
+
+                                "<table border=0 cellspacing=5 cellpadding=5>\n";
+
+                    // headers
+                        out << "<thead><tr bgcolor=#F2E7D5>";
+                        for (int column = 0; column < columnCount; column++)
+                            if (!ui->tableView_partenaire->isColumnHidden(column))
+                                out << QString("<th>%1</th>").arg(ui->tableView_partenaire->model()->headerData(column, Qt::Horizontal).toString());
+                        out << "</tr></thead>\n";
+                        // data table
+                           for (int row = 0; row < rowCount; row++) {
+                               out << "<tr>";
+                               for (int column = 0; column < columnCount; column++) {
+                                   if (!ui->tableView_partenaire->isColumnHidden(column)) {
+                                       QString data = ui->tableView_partenaire->model()->data(ui->tableView_partenaire->model()->index(row, column)).toString().simplified();
+                                       out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+                                   }
+                               }
+                               out << "</tr>\n";
+                           }
+                           out <<  "</table>\n"
+                               "</body>\n"
+                               "</html>\n";
+
+            QTextDocument *document = new QTextDocument();
+            document->setHtml(strStream);
+            //QTextDocument document;
+            //document.setHtml(html);
+            QPrinter printer(QPrinter::PrinterResolution);
+            printer.setOutputFormat(QPrinter::PdfFormat);
+            printer.setOutputFileName("C:\\Users\\Asus TUF\\Desktop\\pdf_output\\pdf.pdf");
+            document->print(&printer);
+
+}
+//Partenaire_tri
+void MainWindow::on_pushButton_partenaire_tri_clicked()
+{
+  if (ui->comboBox_tri_partenaire->currentText()=="Tri par ordre croissant")
+  {
+  ui->tableView_partenaire->setModel(partenaire.triercroissant());
+  }
+  else if (ui->comboBox_tri_partenaire->currentText()=="Tri par ordre decroissant")
+  {
+    ui->tableView_partenaire->setModel(partenaire.trierdecroissant());
+  }
+  else
+  ui->tableView_partenaire->setModel(partenaire.trierref());
+}
+//Partenaire_stat
+void MainWindow::on_pushButton_partenaire_stats_clicked()
+{
+/*statistique_partenaire *s = new statistique_partenaire(this);
+s->show();
+
+
+*/
+}
+
+//Partenaire_rechercher
+void MainWindow::on_pushButton_partenaire_rechercher_clicked()
+{
+    Partenaire p ;
+     if (ui->comboBox_recherche_partenaire->currentText()=="ID")
+     {
+         int id=ui->lineEdit_R_partenaire->text().toInt();
+          ui->tableView_partenaire->setModel(partenaire.Rechercher_ID(id));
+     }
+     else if (ui->comboBox_recherche_partenaire->currentText()=="Type")
+     {
+         QString type=ui->lineEdit_R_partenaire->text();
+         ui->tableView_partenaire->setModel(partenaire.Rechercher_TYPE(type));
+     }
+     else
+     {
+         QString nom = ui->lineEdit_R_partenaire->text();
+         ui->tableView_partenaire->setModel(partenaire.Rechercher_NOM(nom));
+     }
+
+}
+
+
+
+
+
+
+
+//Partenaire_Reset
+void MainWindow::on_pushButton_partenaire_reset_clicked()
+{
+   ui->tableView_partenaire->setModel(partenaire.afficher());
+}
+
 /*void MainWindow::afficherMissionArduino(){
     QString dateRDV,message;
     data = A.read_from_arduino();
@@ -1249,21 +1511,4 @@ void MainWindow::on_tableCALEN_activated(const QModelIndex &index)
              A.write_to_arduino(message.toUtf8());
              }
 }*/
-
-
-
-
-
-
-
-//
-void MainWindow::on_Gestion1_clicked()
-{
- ui->stackedWidget->setCurrentIndex(1);
-}
-
-void MainWindow::on_Gestion2_clicked()
-{
-  ui->stackedWidget->setCurrentIndex(2);
-}
 

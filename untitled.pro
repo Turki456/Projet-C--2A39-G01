@@ -1,5 +1,6 @@
 QT       += core gui  charts  axcontainer
 QT +=sql
+QT += charts
 QT += printsupport
 QT += network
 QT       += core gui  serialport
@@ -22,30 +23,42 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Partenaire.cpp \
+    admindialog.cpp \
     arduino.cpp \
     connection.cpp \
     dialog.cpp \
+    dialoglogin.cpp \
+    employe.cpp \
     exportexcel.cpp \
     logement.cpp \
     main.cpp \
     mainwindow.cpp \
     mission.cpp \
     statistique.cpp \
+    todolist.cpp \
     video.cpp
 
 HEADERS += \
+    Partenaire.h \
+    admindialog.h \
     arduino.h \
     connection.h \
     dialog.h \
+    dialoglogin.h \
+    employe.h \
     exportexcel.h \
     logement.h \
     mainwindow.h \
     mission.h \
     statistique.h \
+    todolist.h \
     video.h
 
 FORMS += \
+    admindialog.ui \
     dialog.ui \
+    dialoglogin.ui \
     mainwindow.ui \
     statistique.ui \
     video.ui
@@ -55,4 +68,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 RESOURCES += \
-    Resources.qrc
+    Resources.qrc \
+    todolistResources.qrc

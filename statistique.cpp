@@ -265,4 +265,258 @@ void statistique::paintEvent2(QPaintEvent *)
 }
 */
 
+/*------------------------------------- STATS EMPLOYE -------------------------------------------------------------*/
+/*------------------------------------- STATS EMPLOYE -------------------------------------------------------------*/
+
+void statistique::bar_stat()
+{
+    QSqlQuery query1,query2,query3;
+    qreal tot=0,s1=0,s2=0;
+
+    //Queries and calculations
+    query1.prepare("SELECT * FROM Employe");
+    query1.exec();
+    query2.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' ");
+    query2.exec();
+    query3.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' ");
+    query3.exec();
+
+
+    while(query1.next()){tot++;}
+    while(query2.next()){s1++;}
+    while(query3.next()){s2++;}
+
+    s1 = s1/tot;
+    s2 = s2/tot;
+
+    //Attacher des noms au lots
+    QBarSet * set1 = new QBarSet("Taux de femmes");
+    QBarSet * set2 = new QBarSet("Taux d'hommes");
+
+    //Attacher des valeurs au lots
+    *set1 << s1;
+    *set2 << s2;
+
+    //Ajouter les lots en une serie
+    QBarSeries * series = new QBarSeries();
+
+    series->append(set1);
+    series->append(set2);
+
+    //Legende du graphe
+    QChart * chart = new QChart();
+
+    //Ajouter la serie au graphe
+    chart->addSeries(series);
+
+    QPalette palette = qApp->palette();
+    palette.setColor(QPalette::Window, QRgb(0xffffff));
+    palette.setColor(QPalette::WindowText, QRgb(0x404044));
+
+    //Appliquer la palette
+    qApp->setPalette(palette);
+
+    //affichage du graphe
+    chartView = new QChartView(chart,ui->stat_le);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setMinimumSize(400,400);
+
+    chartView->show();
+}
+void statistique::pie_chart()
+{
+    QSqlQuery query0,query1,query2;
+    qreal tot=0, s1=0, s2=0;
+    QString keyword = "Specialiste IT";
+
+    //requetes et calculs
+    query0.prepare("SELECT * FROM Employe");
+    query0.exec();
+    query1.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' and poste like '"+keyword+"' OR LOWER(poste) like '"+keyword+"' OR UPPER(poste) like '"+keyword+"' ");
+    query1.exec();
+    query2.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' and poste like '"+keyword+"' OR LOWER(poste) like '"+keyword+"' OR UPPER(poste) like '"+keyword+"' ");
+    query2.exec();
+
+    while(query0.next()){tot++;}
+    while(query1.next()){s1++;}
+    while(query2.next()){s2++;}
+
+    s1 = s1/tot;
+    s2 = s2/tot;
+
+    //definir les tranches
+    QPieSeries *series = new QPieSeries();
+    series->append("Femmes",s1);
+    series->append("Hommes",s2);
+
+
+    // Creer le graphe
+     QChart *chart = new QChart();
+
+    // affecter les donnees au graphique
+    chart->addSeries(series);
+    chart->legend()->show();
+
+
+    // Afficher le graohe
+    chartView = new QChartView(chart,ui->stat_le);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setMinimumSize(400,400);
+
+    chartView->show();
+}
+
+void statistique::pie_stat_femme()
+{
+    QSqlQuery query0,query1,query2,query3,query4,query5,query6;
+    qreal tot=0, s1=0, s2=0, s3=0, s4=0, s5=0, s6=0;
+
+    QString IT = "Specialiste IT";
+    QString RH = "Responsable RH";
+    QString directeur = "Directeur";
+    QString manager ="Manager de projets";
+    QString marketing = "Responsable marketing";
+    QString comptable = "Service comptable";
+
+
+    query0.prepare("SELECT * FROM Employe");
+    query0.exec();
+
+    query1.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' and poste like '"+IT+"' OR LOWER(poste) like '"+IT+"' OR UPPER(poste) like '"+IT+"' ");
+    query1.exec();
+    query2.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' and poste like '"+RH+"' OR LOWER(poste) like '"+RH+"' OR UPPER(poste) like '"+RH+"' ");
+    query2.exec();
+    query3.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' and poste like '"+directeur+"' OR LOWER(poste) like '"+directeur+"' OR UPPER(poste) like '"+directeur+"' ");
+    query3.exec();
+    query4.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' and poste like '"+manager+"' OR LOWER(poste) like '"+manager+"' OR UPPER(poste) like '"+manager+"'");
+    query4.exec();
+    query5.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' and poste like '"+marketing+"' OR LOWER(poste) like '"+marketing+"' OR UPPER(poste) like '"+marketing+"' ");
+    query5.exec();
+    query6.prepare("SELECT * FROM Employe WHERE sexe_E = 'Femme' and poste like '"+comptable+"' OR LOWER(poste) like '"+comptable+"' OR UPPER(poste) like '"+comptable+"' ");
+    query6.exec();
+
+    while(query0.next()){tot++;}
+    while(query1.next()){s1++;}
+    while(query2.next()){s2++;}
+    while(query3.next()){s3++;}
+    while(query4.next()){s4++;}
+    while(query5.next()){s5++;}
+    while(query6.next()){s6++;}
+
+    s1 = s1/tot;
+    s2 = s2/tot;
+    s3 = s3/tot;
+    s4 = s4/tot;
+    s5 = s5/tot;
+    s6 = s6/tot;
+
+    QPieSeries *series = new QPieSeries();
+    series->append("IT",s1);
+    series->setLabelsVisible("IT");
+    series->append("RH",s2);
+    series->setLabelsVisible("RH");
+    series->append("Direction",s3);
+    series->setLabelsVisible("Direction");
+    series->append("Management",s4);
+    series->setLabelsVisible("Management");
+    series->append("Marketing",s5);
+    series->setLabelsVisible("Marketing");
+    series->append("Compatbilité",s6);
+    series->setLabelsVisible("Comptabilité");
+
+
+
+    // Creer le graphe
+     QChart *chart = new QChart();
+
+    // affecter les donnees au graphique
+    chart->addSeries(series);
+    chart->legend()->show();
+
+
+    // Afficher le graohe
+    chartView = new QChartView(chart,ui->stat_le);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setMinimumSize(400,400);
+
+    chartView->show();
+
+}
+void statistique::pie_stat_Homme()
+{
+    QSqlQuery query0,query1,query2,query3,query4,query5,query6;
+    qreal tot=0, s1=0, s2=0, s3=0, s4=0, s5=0, s6=0;
+
+    QString IT = "Specialiste IT";
+    QString RH = "Responsable RH";
+    QString directeur = "Directeur";
+    QString manager ="Manager de projets";
+    QString marketing = "Responsable marketing";
+    QString comptable = "Service comptable";
+
+
+    query0.prepare("SELECT * FROM Employe");
+    query0.exec();
+
+    query1.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' and poste like '"+IT+"' OR LOWER(poste) like '"+IT+"' OR UPPER(poste) like '"+IT+"' ");
+    query1.exec();
+    query2.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' and poste like '"+RH+"' OR LOWER(poste) like '"+RH+"' OR UPPER(poste) like '"+RH+"' ");
+    query2.exec();
+    query3.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' and poste like '"+directeur+"' OR LOWER(poste) like '"+directeur+"' OR UPPER(poste) like '"+directeur+"' ");
+    query3.exec();
+    query4.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' and poste like '"+manager+"' OR LOWER(poste) like '"+manager+"' OR UPPER(poste) like '"+manager+"'");
+    query4.exec();
+    query5.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' and poste like '"+marketing+"' OR LOWER(poste) like '"+marketing+"' OR UPPER(poste) like '"+marketing+"' ");
+    query5.exec();
+    query6.prepare("SELECT * FROM Employe WHERE sexe_E = 'Homme' and poste like '"+comptable+"' OR LOWER(poste) like '"+comptable+"' OR UPPER(poste) like '"+comptable+"' ");
+    query6.exec();
+
+    while(query0.next()){tot++;}
+    while(query1.next()){s1++;}
+    while(query2.next()){s2++;}
+    while(query3.next()){s3++;}
+    while(query4.next()){s4++;}
+    while(query5.next()){s5++;}
+    while(query6.next()){s6++;}
+
+    s1 = s1/tot;
+    s2 = s2/tot;
+    s3 = s3/tot;
+    s4 = s4/tot;
+    s5 = s5/tot;
+    s6 = s6/tot;
+
+    QPieSeries *series = new QPieSeries();
+    series->append("IT",s1);
+    series->setLabelsVisible("IT");
+    series->append("RH",s2);
+    series->setLabelsVisible("RH");
+    series->append("Direction",s3);
+    series->setLabelsVisible("Direction");
+    series->append("Management",s4);
+    series->setLabelsVisible("Management");
+    series->append("Marketing",s5);
+    series->setLabelsVisible("Marketing");
+    series->append("Compatbilité",s6);
+    series->setLabelsVisible("Comptabilité");
+
+
+
+    // Creer le graphe
+     QChart *chart = new QChart();
+
+    // affecter les donnees au graphique
+    chart->addSeries(series);
+    chart->legend()->show();
+
+
+    // Afficher le graohe
+    chartView = new QChartView(chart,ui->stat_le);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setMinimumSize(400,400);
+
+    chartView->show();
+
+}
+
 

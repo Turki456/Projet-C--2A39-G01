@@ -7,6 +7,8 @@
 #include"mission.h"
 #include<QtSql>
 #include<QPrinter>
+#include<Partenaire.h>
+
 
 
 QT_BEGIN_NAMESPACE
@@ -80,10 +82,42 @@ private slots:
 
      void on_Gestion2_clicked();
 
+     void on_todolistBUTTON_clicked();
+
+     void on_pushButton_quitter_admin_crud_clicked();
+//partenaire
+
+     void on_Gestion3_clicked();
+
+     void on_pushButton_partenaire_ajouter_clicked();
+
+     void on_pushButton_partenaire_supprimer_clicked();
+
+
+     void on_pushButton_partenaire_modifier_clicked();
+
+     void on_pushButton_partenaire_pdf_clicked();
+
+     void on_pushButton_partenaire_stats_clicked();
+
+     void on_pushButton_partenaire_tri_clicked();
+
+     void on_pushButton_partenaire_rechercher_clicked();
+
+     void on_pushButton_partenaire_reset_clicked();
+
+     void on_pushButton_Arduino_clicked();
+    // void afficherMissionArduino();
+
+
+
+
+
 private:
     Ui::MainWindow *ui;
     logement Dtmp;
-
+    Partenaire partenaire;
+     // Ui::statistique_partenaire *st;
     QByteArray data; // variable contenant les données reçues
     QByteArray data1;
 Mission m;

@@ -430,6 +430,19 @@ background-color: #8B0000;</string>
     <string>TextLabel</string>
    </property>
   </widget>
+  <widget class="QLabel" name="stat_le">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>1061</width>
+     <height>501</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
