@@ -439,6 +439,12 @@ background-color: #8B0000;</string>
      <height>501</height>
     </rect>
    </property>
+<<<<<<< HEAD:statistique.ui
+=======
+   <property name="styleSheet">
+    <string notr="true">background : white;</string>
+   </property>
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/statistique.ui
    <property name="text">
     <string/>
    </property>

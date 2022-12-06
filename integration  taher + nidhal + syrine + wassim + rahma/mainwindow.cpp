@@ -4,6 +4,7 @@
 #include "dialoglogin.h"
 #include <QMessageBox>
 #include <QIntValidator>
+#include <QPdfWriter>
 #include <QValidator>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -51,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
      //le slot update_label suite à la reception du signal readyRead (reception des données).
 
      ui->setupUi(this);
+      ui->tab_clients->setModel(c.afficher());
     ui->tableView->setModel(Dtmp.afficher());
     ui->cb_id_supp->setModel(Dtmp.getAllId());
 
@@ -1261,13 +1263,27 @@ void MainWindow::afficherMissionArduino(){
 //
 void MainWindow::on_Gestion1_clicked()
 {
+<<<<<<< HEAD:mainwindow.cpp
  ui->stackedWidget->setCurrentIndex(1);
+=======
+ ui->stackedWidget->setCurrentIndex(2);
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/mainwindow.cpp
 }
 
 void MainWindow::on_Gestion2_clicked()
 {
+<<<<<<< HEAD:mainwindow.cpp
   ui->stackedWidget->setCurrentIndex(2);
 }
+=======
+  ui->stackedWidget->setCurrentIndex(3);
+}
+void MainWindow::on_Gestion6_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/mainwindow.cpp
 
 
 void MainWindow::on_todolistBUTTON_clicked()
@@ -1290,9 +1306,20 @@ void MainWindow::on_pushButton_quitter_admin_crud_clicked()
 //gestion partenaire
 void MainWindow::on_Gestion3_clicked()
 {
+<<<<<<< HEAD:mainwindow.cpp
     ui->stackedWidget->setCurrentIndex(3);
 }
 
+=======
+    ui->stackedWidget->setCurrentIndex(4);
+}
+//gestion clients
+void MainWindow::on_Gestion4_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+
+}
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/mainwindow.cpp
 
 // Partenaire_ajout
 void MainWindow::on_pushButton_partenaire_ajouter_clicked()
@@ -1512,3 +1539,214 @@ void MainWindow::on_pushButton_partenaire_reset_clicked()
              }
 }*/
 
+<<<<<<< HEAD:mainwindow.cpp
+=======
+
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    //bouton ajouter client
+    QString id= ui->ID->text();
+   QString nom= ui->NAME->text();
+   QString prenom= ui->PRENOM->text();
+   QString Adresse= ui->ADRESSE->text();
+   QString statut = ui->comboBox_4->currentText();
+   int Tel = ui->TEL->text().toInt();
+   int CIN = ui->CIN->text().toInt();
+
+   Client c (CIN,Tel , nom , prenom , Adresse , statut) ;
+
+
+   bool test= c.ajouter();
+
+   QMessageBox msgBox ;
+   if (test)
+     {  msgBox.setText("ajout avec succes");
+      ui->tab_clients->setModel(c.afficher());
+      ui->CIN->clear();
+      ui->NAME->clear();
+      ui->PRENOM->clear();
+      ui->ADRESSE->clear();
+      ui->TEL->clear();
+   }
+   else
+       msgBox.setText("echec d'ajout");
+   msgBox.exec();
+}
+
+void MainWindow::on_pushButton_9_clicked()
+{
+    // afficher tableau client
+    ui->tab_clients->setModel(c.afficher());
+}
+
+void MainWindow::on_TRI_nom_clicked()
+{//trier le tableau client par nom
+   ui->tab_clients->setModel(c.tri_nom());
+
+}
+
+void MainWindow::on_TRI_clicked()
+{//trier le tableau client par iD
+    ui->tab_clients->setModel(c.tri());
+}
+
+void MainWindow::on_pb_recherche_clicked()
+{
+    //rechercher client par id
+    if (ui->lineEdit->text().isEmpty())
+        {
+            QMessageBox::information(nullptr,QObject::tr("ERREUR"),QObject::tr("INFORMATIONS MANQUANTES\n""click to Cancel to exit."), QMessageBox::Cancel);
+
+        }
+        else {
+        QString val = ui->lineEdit->text();
+       ui->tab_clients->setModel(c.recherche(val));
+       ui->lineEdit->clear();
+}
+}
+
+void MainWindow::on_pb_pdf_clicked()
+{
+
+   //generer un pdf file pour clients
+    QPdfWriter pdf("C:/Users/WIN10PRO/Desktop/rahma.pdf");
+
+           QPainter painter(&pdf);
+          painter.setPen(Qt::green);
+          painter.setFont(QFont("Times New Roman", 40));
+          painter.drawText(1500,1500,"LISTE DES CLIENTS");
+          painter.drawRect(3800,1200,1700,500);
+          painter.drawRect(0,3000,9600,500);
+          painter.setPen(Qt::blue);
+          painter.setFont(QFont("Arial Black", 11));
+          painter.drawText(500,3300,"ID");
+          painter.drawText(2000,3300,"CIN");
+          painter.drawText(3500,3300,"TEL");
+          painter.drawText(5000,3300,"NOM");
+          painter.drawText(6500,3300,"PRENOM");
+          painter.drawText(8000,3300,"ADRESSE");
+          painter.drawText(10000,3300,"STATUT");
+
+
+
+          QSqlQuery query;
+          int i = 4000;
+
+           query.prepare("select * from CLIENT");
+           query.exec();
+        while (query.next())
+          {
+          painter.setPen(Qt::black);
+          painter.setFont(QFont("Arial", 15));
+          painter.drawText(500,i,query.value(0).toString());
+          painter.drawText(2000,i,query.value(1).toString());
+          painter.drawText(3500,i,query.value(2).toString());
+          painter.drawText(5000,i,query.value(3).toString());
+          painter.drawText(6500,i,query.value(4).toString());
+          painter.drawText(8000,i,query.value(5).toString());
+          painter.drawText(10000,i,query.value(6).toString());
+
+
+
+          i = i +500;
+                              }
+}
+
+void MainWindow::on_pushButton_12_clicked()
+{//bouton modifier client
+    int ID=ui->ID_MOD->text().toInt();
+    QString nom= ui->NOM_MOD->text();
+    QString prenom= ui->PRENOM_MOD->text();
+    QString Adresse= ui->ADRESSE_MOD->text();
+    QString statut = ui->STATUT_MOD->currentText();
+    int Tel = ui->TEL_MOD->text().toInt();
+    int CIN = ui->CIN_MOD->text().toInt();
+
+
+     Client C (ID,CIN , Tel , nom , prenom , Adresse,statut) ;
+
+    bool test=C.modifier(ID);
+    if (test)
+      {
+        ui->tab_clients->setModel(c.afficher());
+    QMessageBox::information(nullptr,QObject::tr("done"),QObject::tr("modification effectué\n""click to Cancel to exit."), QMessageBox::Cancel);
+    ui->tab_clients->setModel(c.afficher());
+    ui->ID_MOD->clear();
+    ui->CIN_MOD->clear();
+    ui->NOM_MOD->clear();
+    ui->PRENOM_MOD->clear();
+    ui->NOM_MOD->clear();
+    }
+
+    else
+    {QMessageBox::critical(nullptr, QObject::tr("not done"),QObject::tr("modification non effectué.\n" "click to cancel to exit."),QMessageBox::Cancel);}
+
+
+}
+
+void MainWindow::on_pushButton_14_clicked()
+{
+    //bouton supprimer client
+    Client c1 ;
+    c1.setCIN( (ui->Cin_supp->text().toInt())) ;
+    bool test= c1.supprimer(c1.getCIN()) ;
+
+    QMessageBox msgBox ;
+    if (test)
+    {
+    msgBox.setText("suppression avec succes");
+    ui->tab_clients->setModel(c1.afficher());
+    }
+    else
+        msgBox.setText("echec de suppression");
+    msgBox.exec();
+
+}
+
+void MainWindow::on_pushButton_15_clicked()
+{
+    //bouton stt
+    QSqlQueryModel * model= new QSqlQueryModel();
+        model->setQuery("SELECT * FROM client WHERE statut='Single' ");
+        int number1=model->rowCount();
+        model->setQuery("SELECT * FROM client WHERE statut='Sous societe'");
+        int number2=model->rowCount();
+
+        int total=number1+number2;
+        QString a = QString("single  "+QString::number((number1*100)/total,'f',2)+"%");
+        QString b = QString("sous societe  "+QString::number((number2*100)/total,'f',2)+"%");
+
+        //charte pie style
+        QPieSeries *series = new QPieSeries();
+        series->append(a,number1); //te9sem charte graphique
+        series->append(b,number2);
+
+        if (number1!= 0)
+        {
+            //partie 1 de cercle
+            QPieSlice *slice = series->slices().at(0);
+            //affichage de pourcantage
+            slice->setLabelVisible();
+        }
+        if (number2!=0)
+        {
+            //partie 2 de cercle
+            QPieSlice *slice1 = series->slices().at(1);
+            //affichage de pourcantage
+            slice1->setLabelVisible();
+        }
+        //Create the chart widget
+        QChart *chart = new QChart();
+        //ajout des donnee et titre
+        chart->addSeries(series);
+        chart->setTitle("Pourcentage des statut des clients ");
+        //afficher le charte avec sa parametre de taille
+        QChartView *chartView = new QChartView(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+        chartView->resize(1000,500);
+        chartView->show();
+}
+
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/mainwindow.cpp

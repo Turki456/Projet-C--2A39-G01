@@ -8,7 +8,11 @@
 #include<QtSql>
 #include<QPrinter>
 #include<Partenaire.h>
+<<<<<<< HEAD:mainwindow.h
 
+=======
+#include "client.h"
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/mainwindow.h
 
 
 QT_BEGIN_NAMESPACE
@@ -64,7 +68,7 @@ private slots:
 
      void on_pushButton_10_clicked();
 
-     void on_tab_Mission_activated(const QModelIndex &index);
+     //void on_tab_Mission_activated(const QModelIndex &index);
 
      void on_pushButton_7_clicked();
 
@@ -106,13 +110,42 @@ private slots:
 
      void on_pushButton_partenaire_reset_clicked();
 
+<<<<<<< HEAD:mainwindow.h
      void on_pushButton_Arduino_clicked();
+=======
+     //void on_pushButton_Arduino_clicked();
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/mainwindow.h
     // void afficherMissionArduino();
 
 
 
 
 
+<<<<<<< HEAD:mainwindow.h
+=======
+     void on_Gestion4_clicked();
+
+     void on_pushButton_5_clicked();
+
+     void on_pushButton_9_clicked();
+
+     void on_TRI_nom_clicked();
+
+     void on_TRI_clicked();
+
+     void on_pb_recherche_clicked();
+
+     void on_pb_pdf_clicked();
+
+     void on_pushButton_12_clicked();
+
+     void on_pushButton_14_clicked();
+
+     void on_pushButton_15_clicked();
+
+     void on_Gestion6_clicked();
+
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/mainwindow.h
 private:
     Ui::MainWindow *ui;
     logement Dtmp;
@@ -122,5 +155,6 @@ private:
     QByteArray data1;
 Mission m;
     Arduino A; // objet temporaire
+    Client c;
 };
 #endif // MAINWINDOW_H

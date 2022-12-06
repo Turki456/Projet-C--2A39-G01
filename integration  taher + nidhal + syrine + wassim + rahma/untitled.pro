@@ -26,6 +26,7 @@ SOURCES += \
     Partenaire.cpp \
     admindialog.cpp \
     arduino.cpp \
+    client.cpp \
     connection.cpp \
     dialog.cpp \
     dialoglogin.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     Partenaire.h \
     admindialog.h \
     arduino.h \
+    client.h \
     connection.h \
     dialog.h \
     dialoglogin.h \

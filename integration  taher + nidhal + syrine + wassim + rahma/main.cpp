@@ -13,8 +13,13 @@ int main(int argc, char *argv[])
     MainWindow w;
     Dialoglogin l;
     if(test)
+<<<<<<< HEAD:main.cpp
     {w.show();
         //l.show();
+=======
+    {//w.show();
+        l.show();
+>>>>>>> 279b53c37b357bc694b3239812a2b7ebc148bca2:integration  taher + nidhal + syrine + wassim + rahma/main.cpp
         QMessageBox::information(nullptr, QObject::tr("database is open"),
                     QObject::tr("connection successful.\n"
                                 "Click Cancel to exit."), QMessageBox::Cancel);
